@@ -174,7 +174,17 @@ async def chat_completions(
         )
     except Exception as e:
         logger.error(f"Error generating Gemini response: {e}", exc_info=True)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Backend Gemini error: {str(e)}",
+        # Wearable UX: return a readable status message to the glasses instead of a 500 error
+        return ChatCompletionResponse(
+            model=settings.GEMINI_MODEL,
+            choices=[
+                ChatCompletionChoice(
+                    index=0,
+                    message=ChatCompletionChoiceMessage(
+                        role="assistant",
+                        content="Gemini is temporarily unavailable. Please try again shortly.",
+                    ),
+                    finish_reason="stop",
+                )
+            ],
         )

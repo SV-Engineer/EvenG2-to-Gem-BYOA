@@ -138,14 +138,15 @@ Cloudflare Tunnel provides free, instant HTTPS without port forwarding or exposi
   - [x] Google GenAI SDK integration (`gemini-3.8-flash`)
   - [x] Smart glasses HUD prompt injection & MicroLED text cleaner (`app/hud.py`)
   - [x] SSE streaming chunk delivery (`stream: true`)
+  - [x] High-demand resilience: 300ms retry, model fallback cascade (Flash ➔ Flash-Latest ➔ Flash-Lite), and graceful HUD degradation
   - [x] Debug suite: mock test client (`scripts/test_client.py`), diagnostic `/health`, and offline `MOCK_GEMINI` mode
   - [x] VS Codium / VS Code F5 debugger configuration (`.vscode/launch.json`)
 
 - [ ] **Phase 2: Validation & Mobile Linking**
   - [x] Local end-to-end test run with mock client (verified live 200 OK inference with Google AI Studio)
-  - [ ] Install `cloudflared` & launch public HTTPS tunnel
-  - [ ] Connect Even companion app (`Settings → Even AI → Agent Configuration`)
-  - [ ] Live hardware verification with Even Realities G2 smart glasses
+  - [x] Install `cloudflared` & launch public HTTPS tunnel
+  - [x] Connect Even companion app (`Settings → Even AI → Agent Configuration`) over tunnel
+  - [ ] Launch new Cloudflare tunnel & verify live query on Even Realities G2 smart glasses
   - [ ] Automated unit test suite (`pytest` for auth, HUD markdown cleaner, and schemas)
 
 - [ ] **Phase 3: Deployment & Always-On Packaging**
