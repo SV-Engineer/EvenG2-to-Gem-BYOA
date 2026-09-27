@@ -54,7 +54,10 @@ Because the proxy is exposed to the internet via Cloudflare Tunnel, robust authe
    * **EvenHub Developer Access:** You must be enrolled as an EvenHub developer (or toggle Developer Mode in app settings) to unlock the `Settings → Even AI → Agent Configuration` menu.
 3. **Software:**
    * Python 3.10+
-   * `cloudflared` (Cloudflare Tunnel CLI)
+   * `cloudflared` (Cloudflare Tunnel CLI):
+     * **Windows:** `winget install --id Cloudflare.cloudflared`
+     * **Ubuntu / Debian:** `curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb && sudo dpkg -i cloudflared.deb`
+     * **macOS:** `brew install cloudflared`
 
 ---
 
@@ -65,9 +68,13 @@ Because the proxy is exposed to the internet via Cloudflare Tunnel, robust authe
 git clone https://github.com/SV-Engineer/EvenG2-to-Gem-BYOA.git
 cd EvenG2-to-Gem-BYOA
 
-# Create and activate virtual environment
+# Create virtual environment
 python -m venv .venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Activate:
+source .venv/Scripts/activate     # Windows (Git Bash)
+# .\.venv\Scripts\Activate.ps1    # Windows (PowerShell)
+# source .venv/bin/activate       # Linux / macOS
 
 # Install requirements
 pip install -r requirements.txt
@@ -86,7 +93,7 @@ PROXY_API_KEY=your_secure_custom_token_here
 
 # Google Gemini Configuration
 GEMINI_API_KEY=your_google_ai_studio_api_key_here
-GEMINI_MODEL=gemini-2.5-flash
+GEMINI_MODEL=gemini-3.8-flash
 
 # HUD Prompt Tuning (Tailored for G2 MicroLED display)
 HUD_SYSTEM_PROMPT="You are an assistant displayed on smart glasses heads-up display. Respond in 1 to 3 short sentences. Use plain text only. Never use markdown, bolding, bullet points, or asterisks."
@@ -122,21 +129,34 @@ Cloudflare Tunnel provides free, instant HTTPS without port forwarding or exposi
 
 ## 6. Development Roadmap
 
-- [ ] **Phase 1: Minimal Working Prototype**
-  - [x] Architecture & README design
-  - [ ] FastAPI server implementing `/v1/chat/completions` (OpenAI request/response schema)
-  - [ ] Bearer token authentication middleware
-  - [ ] Google GenAI SDK integration (`gemini-2.5-flash`)
-- [ ] **Phase 2: HUD Formatting & Tuning**
-  - [ ] System prompt injection for MicroLED character limits
-  - [ ] Response length guards & text cleaner (stripping markdown / asterisks)
-  - [ ] Streaming support (`stream: true` chunk delivery for lowest latency)
-- [ ] **Phase 3: Deployment & Automation**
-  - [ ] Dockerfile & `docker-compose.yml` with optional integrated `cloudflared` container
-  - [ ] One-script setup for systemd / daemon services
-- [ ] **Phase 4: Advanced Features**
-  - [ ] Multi-agent / multi-model selector (Gemini Pro, Claude, local Ollama)
-  - [ ] Function calling & external tools (weather, calendar, search)
+- [x] **Phase 1: Architecture & Core Implementation**
+  - [x] Architecture design & universal ASCII dataflow diagram
+  - [x] Dual-shell environment support (PowerShell & Git Bash on Windows, Bash on Linux)
+  - [x] Modular package structure (`app/` package + root `main.py`)
+  - [x] FastAPI `/v1/chat/completions` OpenAI-compatible endpoint
+  - [x] Bearer token auth middleware (`PROXY_API_KEY`) with 401 rejection
+  - [x] Google GenAI SDK integration (`gemini-3.8-flash`)
+  - [x] Smart glasses HUD prompt injection & MicroLED text cleaner (`app/hud.py`)
+  - [x] SSE streaming chunk delivery (`stream: true`)
+  - [x] Debug suite: mock test client (`scripts/test_client.py`), diagnostic `/health`, and offline `MOCK_GEMINI` mode
+  - [x] VS Codium / VS Code F5 debugger configuration (`.vscode/launch.json`)
+
+- [ ] **Phase 2: Validation & Mobile Linking**
+  - [x] Local end-to-end test run with mock client (verified live 200 OK inference with Google AI Studio)
+  - [ ] Install `cloudflared` & launch public HTTPS tunnel
+  - [ ] Connect Even companion app (`Settings → Even AI → Agent Configuration`)
+  - [ ] Live hardware verification with Even Realities G2 smart glasses
+  - [ ] Automated unit test suite (`pytest` for auth, HUD markdown cleaner, and schemas)
+
+- [ ] **Phase 3: Deployment & Always-On Packaging**
+  - [ ] Dockerfile & `docker-compose.yml` (FastAPI bridge + bundled `cloudflared` tunnel)
+  - [ ] Ubuntu headless server deployment guide & systemd daemon service
+  - [ ] Auto-restart and health watchdog
+
+- [ ] **Phase 4: Advanced Wearable Features**
+  - [ ] Google Search Grounding tool (real-time web search results on your glasses)
+  - [ ] Multi-turn conversation state persistence
+  - [ ] Multi-agent / multi-model router (Gemini Pro, Claude, local Ollama)
 
 ---
 

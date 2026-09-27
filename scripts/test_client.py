@@ -8,8 +8,13 @@ Usage:
 """
 
 import argparse
+import os
 import sys
 import httpx
+from dotenv import load_dotenv
+
+# Load local .env so testing is automatic without retyping keys
+load_dotenv()
 
 
 def test_chat(
@@ -106,8 +111,8 @@ def main():
     )
     parser.add_argument(
         "--key",
-        default="",
-        help="Bearer token (PROXY_API_KEY). If omitted, empty string is sent.",
+        default=os.getenv("PROXY_API_KEY", ""),
+        help="Bearer token (PROXY_API_KEY). Defaults to PROXY_API_KEY in .env.",
     )
     parser.add_argument(
         "--query",
