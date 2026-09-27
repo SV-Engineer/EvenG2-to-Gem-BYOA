@@ -15,14 +15,20 @@ A lightweight Python backend bridge connecting **Even Realities G2 smart glasses
 
 ## 2. Architecture & Data Flow
 
-```mermaid
-flowchart LR
-    A["G2 Glasses"] <-->|"BLE"| B["Phone (Even App)"]
-    B -->|"HTTPS (Bearer Auth)"| C["Cloudflare Tunnel"]
-    C -->|"HTTP localhost:8000"| D["FastAPI Bridge"]
-    D -->|"Google GenAI SDK"| E["Google Gemini Flash"]
-    E -->|"Response Stream"| D
-    D -->|"OpenAI JSON Format"| B
+```text
+[ G2 Glasses ] <--(BLE)--> [ Even Companion App ]
+                                   │
+                                   │ HTTPS (Bearer PROXY_API_KEY)
+                                   ▼
+                         [ Cloudflare Tunnel ]
+                                   │
+                                   │ HTTP (localhost:8000)
+                                   ▼
+                         [ FastAPI Bridge Proxy ]
+                                   │
+                                   │ Google GenAI SDK (GEMINI_API_KEY)
+                                   ▼
+                         [ Google Gemini Flash ]
 ```
 
 ---
